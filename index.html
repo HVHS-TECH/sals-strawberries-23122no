@@ -24,8 +24,10 @@
 
     <p id="loginMessage">Welcome! Please log in:</p>
 
-    <button onclick="fb_authenticate()">Login with Google</button>
-    <button onclick="displayEmail()">View an email</button>
+    <button id="loginButton" onclick="fb_authenticate()">Login with Google</button>
+    <button id="emailButton" onclick="displayEmail()">View an email</button>
+
+    <div id="emailHeading">
 
     <form id="fruitForm">
       <!--------
@@ -43,6 +45,9 @@
     </form>
 
     <button onclick="writeForm()">Submit</button>
+
+    </div><div id="emailContent"></div>
+    <div id="favourites"></div>
 
     <p id="statusMessage"></p>
   </div>

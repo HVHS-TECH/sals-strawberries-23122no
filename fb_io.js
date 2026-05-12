@@ -22,7 +22,8 @@ function fb_handleLogin(_user) {
     uid = _user.uid;
     console.log("User is logged in")
     console.log(GLOBAL_user);
-    loginMessage.innerHTML = "<p> Welcome, " + GLOBAL_user.displayName + "!</p>"
+    loginMessage.innerHTML = "<p> Welcome, " + GLOBAL_user.displayName + "!</p> <img src=" + GLOBAL_user.photoURL + ">"
+    loginButton.style.display = "none"
   } else {
     console.log("User is NOT logged in - Starting the popup process")
     fb_popupLogin();
