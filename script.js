@@ -1,8 +1,6 @@
 
 console.log("Running Sal's Strawberries");
 
-fb_checkFavouriteFruits();
-
 function writeForm() {
     if (GLOBAL_user) {
 
@@ -16,7 +14,9 @@ function writeForm() {
         firebase.database().ref("store/users/" + uid + "/name").set(GLOBAL_user.displayName);
         firebase.database().ref("store/users/" + uid + "/email").set(GLOBAL_user.email);
 
-        console.log("Data stored");
+        alert("Thank you for submitting the form!");
+
+        fb_checkFavouriteFruits();
 
     } else if (GLOBAL_user == null) {
         alert("You have not logged in yet. Please log in before submitting the form")
@@ -43,23 +43,27 @@ function fb_readUserDetails(snapshot) {
 }
 
 function fb_checkFavouriteFruits() {
-  firebase.database().ref("store/users").once("value", fb_readEachFavourite, fb_error)
-  firebase.database().ref("store/favourites").once("value", fb_readCurrentFavourites, fb_error)
+  firebase.database().ref("store/users").once("value", fb_readEachUser, fb_error)
 }
 
-function fb_readCurrentFavourites(snapshot) {
-    snapshot.forEach(fb_countTheFruits)
+function fb_readEachUser(snapshot) {
+  snapshot.forEach(fb_readEachFavourite)
 }
 
-function fb_countTheFruits(child) {
-    console.log(child.val())
-}
+var currentFruit;
 
-function fb_readEachFavourite(snapshot) {
-  snapshot.forEach(fb_countOneFavourite);
-}
-
-function fb_countOneFavourite(child) {
+function fb_readEachFavourite(child) {
   var user = child.val();
-  firebase.database().ref("store/favourites/" + user["favouriteFruit"]).set(1);
+  currentFruit = user["favouriteFruit"];
+
+  firebase.database().ref("store/favourites/" + user["favouriteFruit"]).once("value", fb_readFavouriteAmount, fb_error)
+}
+
+function fb_readFavouriteAmount(snapshot) {
+  var newAmount = snapshot.val() + 1;
+    firebase.database().ref("store/favourites/" + currentFruit).set(newAmount);
+}
+
+function displayFavourites() {
+  favourites.innerHTML  = "<p> favourites will appear here <p>"
 }

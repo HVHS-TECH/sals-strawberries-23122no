@@ -1,11 +1,11 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyBk9KCTaVFXFeZLo5y3nLj2lMx_UU3yoVg",
-  authDomain: "nina-ongley-12comp.firebaseapp.com",
-  databaseURL: "https://nina-ongley-12comp-default-rtdb.firebaseio.com",
-  projectId: "nina-ongley-12comp",
-  storageBucket: "nina-ongley-12comp.firebasestorage.app",
-  messagingSenderId: "514651150515",
-  appId: "1:514651150515:web:c5bd54dd486ea33b8078c6"
+  apiKey: "AIzaSyDCNv2W4c7UrzO2ht3wzZRVmElu633RPvs",
+  authDomain: "nina-12comp-sal-s-strawberries.firebaseapp.com",
+  databaseURL: "https://nina-12comp-sal-s-strawberries-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nina-12comp-sal-s-strawberries",
+  storageBucket: "nina-12comp-sal-s-strawberries.firebasestorage.app",
+  messagingSenderId: "674069350791",
+  appId: "1:674069350791:web:d35f96b9c78e5d7fcd6b22"
 };
 
 // Initialize Firebase
