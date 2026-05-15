@@ -1,6 +1,29 @@
 
 console.log("Running Sal's Strawberries");
 
+var defaultPage = `
+    <div id="emailHeading">
+
+    <form id="fruitForm">
+      <!--------
+      <label for="name">Your Name:</label>
+      <input type="text" id="name" name="name" required />
+      ------->
+
+      <label for="favoriteFruit">Favorite Fruit:</label>
+      <input type="text" id="favoriteFruit" name="favoriteFruit" required />
+
+      <label for="fruitQuantity">How many servings per week?</label>
+      <input type="number" id="fruitQuantity" name="fruitQuantity" required />
+
+      <!-- add more fields here -->
+    </form>
+
+    <button onclick="writeForm()">Submit</button>
+
+    </div><div id="emailContent"></div>
+`
+
 function writeForm() {
     if (GLOBAL_user) {
 
@@ -43,27 +66,41 @@ function fb_readUserDetails(snapshot) {
 }
 
 function fb_checkFavouriteFruits() {
+  firebase.database().ref("store/favourites/").remove();
   firebase.database().ref("store/users").once("value", fb_readEachUser, fb_error)
 }
 
-function fb_readEachUser(snapshot) {
-  snapshot.forEach(fb_readEachFavourite)
+function fb_readEachUser(users) {
+  console.log(users.val())
+  users.forEach(fb_readEachFavourite)
 }
 
 var currentFruit;
 
-function fb_readEachFavourite(child) {
-  var user = child.val();
-  currentFruit = user["favouriteFruit"];
-
-  firebase.database().ref("store/favourites/" + user["favouriteFruit"]).once("value", fb_readFavouriteAmount, fb_error)
+function fb_readEachFavourite(userData) {
+  var userObject = userData.val();
+  currentFruit = userObject["favouriteFruit"];
+  console.log(currentFruit)
+  firebase.database().ref("store/favourites/" + userObject["favouriteFruit"] + "/amount").once("value", fb_readFavouriteAmount, fb_error)
 }
 
-function fb_readFavouriteAmount(snapshot) {
-  var newAmount = snapshot.val() + 1;
-    firebase.database().ref("store/favourites/" + currentFruit).set(newAmount);
+function fb_readFavouriteAmount(currentAmount) {
+  var newAmount = currentAmount.val() + 1;
+  firebase.database().ref("store/favourites/" + currentFruit + "/amount").set(newAmount);
+  firebase.database().ref("store/favourites/" + currentFruit + "/name").set(currentFruit);
 }
 
 function displayFavourites() {
-  favourites.innerHTML  = "<p> favourites will appear here <p>"
+  firebase.database().ref("store/favourites/").orderByChild("amount").limitToLast(5).once("value", fb_checkFavouriteAmount, fb_error)
+}
+
+function fb_checkFavouriteAmount(snapshot) {
+  console.log(snapshot.val())
+  snapshot.forEach(displayFavouriteAmounts)
+}
+
+function displayFavouriteAmounts(child){
+  console.log(child.val());
+  let fruit = child.val();
+  favourites.innerHTML += "<p>" + fruit["name"] + ": " + fruit["amount"] + "</p>";
 }

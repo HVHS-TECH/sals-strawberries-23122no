@@ -26,8 +26,11 @@
 
     <button id="loginButton" onclick="fb_authenticate()">Login with Google</button>
     <button id="emailButton" onclick="displayEmail()">View an email</button>
-    <button id="emailButton" onclick="displayFavourites()">View favourite fruits</button>
+    <button id="updateFavouritesButton" onclick="fb_checkFavouriteFruits()">Update favourite fruits</button>
+    <button id="displayFavouritesButton" onclick="displayFavourites()">View favourite fruits</button>
+    <button id="homePageButton" onclick="homePage()">View home page</button>
 
+    <div id="homePage">
 
     <div id="emailHeading">
 
@@ -49,6 +52,7 @@
     <button onclick="writeForm()">Submit</button>
 
     </div><div id="emailContent"></div>
+    </div>
     <div id="favourites"></div>
 
     <p id="statusMessage"></p>
