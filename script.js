@@ -1,7 +1,8 @@
 
+var currentFruit;
 console.log("Running Sal's Strawberries");
 
-var defaultPage = `
+const DEFAULT_PAGE = `
     <div id="emailHeading">
 
     <form id="fruitForm">
@@ -65,6 +66,11 @@ function fb_readUserDetails(snapshot) {
     }
 }
 
+
+
+
+var favourites = [];
+
 function fb_checkFavouriteFruits() {
   firebase.database().ref("store/favourites/").remove();
   firebase.database().ref("store/users").once("value", fb_readEachUser, fb_error)
@@ -75,23 +81,30 @@ function fb_readEachUser(users) {
   users.forEach(fb_readEachFavourite)
 }
 
-var currentFruit;
-
 function fb_readEachFavourite(userData) {
+  console.log(userData.val())
   var userObject = userData.val();
-  currentFruit = userObject["favouriteFruit"];
-  console.log(currentFruit)
-  firebase.database().ref("store/favourites/" + userObject["favouriteFruit"] + "/amount").once("value", fb_readFavouriteAmount, fb_error)
+  var favourite = {[userObject["favouriteFruit"]]: userObject["quantity"]}
+  favourites.push(favourite)
+  console.log(favourite)
+  console.log(favourites)
+  firebase.database().ref("store/favourites/").set(favourites);
 }
 
 function fb_readFavouriteAmount(currentAmount) {
-  var newAmount = currentAmount.val() + 1;
-  firebase.database().ref("store/favourites/" + currentFruit + "/amount").set(newAmount);
-  firebase.database().ref("store/favourites/" + currentFruit + "/name").set(currentFruit);
+  console.log(currentAmount.val())
 }
 
+
+
+
+
+
+
+
+
 function displayFavourites() {
-  firebase.database().ref("store/favourites/").orderByChild("amount").limitToLast(5).once("value", fb_checkFavouriteAmount, fb_error)
+  firebase.database().ref("store/favourites/").limitToLast(3).once("value", fb_checkFavouriteAmount, fb_error)
 }
 
 function fb_checkFavouriteAmount(snapshot) {
@@ -101,6 +114,8 @@ function fb_checkFavouriteAmount(snapshot) {
 
 function displayFavouriteAmounts(child){
   console.log(child.val());
-  let fruit = child.val();
-  favourites.innerHTML += "<p>" + fruit["name"] + ": " + fruit["amount"] + "</p>";
+}
+
+function displayHomePage() {
+  homePage.innerHTML = DEFAULT_PAGE;
 }
